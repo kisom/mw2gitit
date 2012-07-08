@@ -12,7 +12,7 @@
 (defrecord Page
     [title timestamp author text])
 
-(defn get-title
+(defn- get-title
   "Pull the title from a page."
   [page]
   (first
@@ -21,8 +21,7 @@
      (filter #(= (:tag %))
              (:content page))))))
 
-
-(defn get-timestamp
+(defn- get-timestamp
   "Pull the timestamp from a page."
   [page]
   (first
@@ -34,7 +33,7 @@
                (filter #(= (:tag %) :revision)
                        (:content page)))))))))
 
-(defn get-author
+(defn- get-author
   "Pull the author from a page."
   [page]
   (first
@@ -49,7 +48,7 @@
                          (filter #(= (:tag %) :revision)
                                  (:content page))))))))))))
 
-(defn get-content
+(defn- get-content
   "Get the page content from the wiki."
   [page]
   (first
