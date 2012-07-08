@@ -1,9 +1,9 @@
 (ns mw2gitit.core
-  (:gen-class)
   (:require [clojure.xml :as xml])
   (:require [clojure.tools.cli :as cli])
-  (:require [mw2gitit.pages])
-  (:require [mw2gitit.server :as server]))
+  (:use [mw2gitit.page-helper])
+  (:use [qmw2gitit.server])
+  (:gen-class))
 
 (def ^:dynamic *output-dir* (ref (atom nil)))
 
@@ -20,23 +20,21 @@
   (println "    -s    enable web server interface")
   (System/exit 1))
 
-
-;; (cli args
-;;      ["-p" "--port" "Listen on this port" :parse-fn #(Integer. %)]
-;;      ["-h" "--host" "The hostname" :default "localhost"]
-;;      ["-v" "--[no-]verbose" :default true]
-;;      ["-l" "--log-directory" :default "/some/path"])
-
-
 (defn -main
   [& args]
   (let [[options args banner]
         (cli/cli args
-                 ["-s" "--server" "Use the web server interface."]
+                 ["-s" "--server" "Use the web server interface." :flag true]
                  [ "-o" "--output" "Specify the output directory."
                    :default "data/"])]
     (when (empty? args)
       (println "mw2gitit: convert mediawiki XML dumps to gitit")
       (println banner)
       (System/exit 1))
+    (println options)
+    (if (in? options :server) (future mw2gitit.server/start))
+    (if (in? options :output) nil)
+    ;; (doseq [file args]
+    ;;   (println "[+] loaded" (count (page-helper/get-pages file))
+    ;;            "pages from" file))
     (println "[+] okay")))
