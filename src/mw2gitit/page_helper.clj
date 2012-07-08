@@ -74,3 +74,10 @@
   (let [xml-dump (:content (xml/parse xml-file))]
     (filter #(= (:tag %) :page)
             (:content (xml/parse xml-file)))))
+
+;; (defn page-to-textile
+;;   [page-rec]
+;;   (doto (MarkupParser.)
+;;     (. ))
+
+;;   )
