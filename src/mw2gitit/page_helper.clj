@@ -16,11 +16,13 @@
 (defn- get-title
   "Pull the title from a page."
   [page]
-  (first
-   (:content
-    (first
-     (filter #(= (:tag %))
-             (:content page))))))
+  (clojure.string/replace (first
+                           (:content
+                            (first
+                             (filter #(= (:tag %))
+                                     (:content page)))))
+                          #"[/\\]"
+                          "-"))
 
 (defn- get-timestamp
   "Pull the timestamp from a page."
@@ -87,15 +89,15 @@
         html-text (.parseToHtml markup-parser (:text page-rec))
         md-text (:out (summon-pandoc html-text))]
     (Page. (:title page-rec)
-                (:timestamp page-rec)
-                (:author page-rec)
-                md-text)))
-
+           (:timestamp page-rec)
+           (:author page-rec)
+           md-text)))
 
 (defn page-rec-to-gitit
   [page-rec out-dir]
-  (let [page (format "format: markdown\n%s\n" (:text page-rec))
+  (let [page (format "---\nformat: markdown\n...\n%s\n" (:text page-rec))
         file-name (format "%s/%s.page" out-dir (:title page-rec))]
+    (printf "[+] processing '%s'\n" file-name)
     (spit file-name page)))
 
 (defn store-page

@@ -34,10 +34,11 @@
     (if (in? options :server) (future server/start))
     (if (in? options :output) (dosync (ref-set *output-dir* (:output options))))
     (doseq [file args]
-      (println "[+] loaded" (count (page-helper/get-pages file))
-               "pages from" file)
-      (pmap #(page-helper/store-page % (deref *output-dir*))
-            (page-helper/get-pages file)))
-
+      (let [pages (page-helper/get-pages file)]
+        (println "[+] output dir:" (deref *output-dir*))
+        (println "[+] loaded" (count pages)
+                 "pages from" file)
+        (doseq [page pages]
+          (page-helper/store-page page (deref *output-dir*)))))
     (println "[+] okay"))
   (System/exit 0))
