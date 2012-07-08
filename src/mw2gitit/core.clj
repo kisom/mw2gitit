@@ -32,8 +32,12 @@
       (println banner)
       (System/exit 1))
     (if (in? options :server) (future server/start))
-    (if (in? options :output) nil)
+    (if (in? options :output) (dosync (ref-set *output-dir* (:output options))))
     (doseq [file args]
       (println "[+] loaded" (count (page-helper/get-pages file))
-               "pages from" file))
-    (println "[+] okay")))
+               "pages from" file)
+      (pmap #(page-helper/store-page % (deref *output-dir*))
+            (page-helper/get-pages file)))
+
+    (println "[+] okay"))
+  (System/exit 0))

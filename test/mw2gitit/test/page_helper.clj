@@ -2,8 +2,9 @@
   (:use [mw2gitit.page_helper :as page-helper])
   (:use [clojure.test]))
 
-(def test-page "data/test-page.xml")
-(def valid-text "This is a test page. We are verifying it works. [[Main Page]]")
+(defonce test-page "data/test-page.xml")
+(defonce valid-text
+  "This is a test page. We are verifying it works. [[Main Page]]")
 
 (deftest load-page
   "Ensure the library actually loads."
@@ -17,5 +18,4 @@
         page (page-helper/build-page (first pages))]
     (is (= (:author page) "Kyle"))
     (is (= (:title page) "Test-page"))
-    (is (= (:text page) valid-text)))
-  )
+    (is (= (:text page) valid-text))))
