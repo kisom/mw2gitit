@@ -1,8 +1,8 @@
 (ns mw2gitit.core
   (:require [clojure.xml :as xml])
   (:require [clojure.tools.cli :as cli])
-  (:use [mw2gitit.page-helper])
-  (:use [qmw2gitit.server])
+  (:require [mw2gitit.page_helper :as page-helper])
+  (:require [mw2gitit.server :as server])
   (:gen-class))
 
 (def ^:dynamic *output-dir* (ref (atom nil)))
@@ -31,10 +31,9 @@
       (println "mw2gitit: convert mediawiki XML dumps to gitit")
       (println banner)
       (System/exit 1))
-    (println options)
-    (if (in? options :server) (future mw2gitit.server/start))
+    (if (in? options :server) (future server/start))
     (if (in? options :output) nil)
-    ;; (doseq [file args]
-    ;;   (println "[+] loaded" (count (page-helper/get-pages file))
-    ;;            "pages from" file))
+    (doseq [file args]
+      (println "[+] loaded" (count (page-helper/get-pages file))
+               "pages from" file))
     (println "[+] okay")))

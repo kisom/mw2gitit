@@ -1,4 +1,4 @@
-(ns mw2gitit.page-helper
+(ns mw2gitit.page_helper
   (:require [clojure.xml :as xml])
   (:import [org.eclipse.mylyn.wikitext.core.parser MarkupParser])
   (:import [org.eclipse.mylyn.wikitext.mediawiki.core MediaWikiLanguage])
